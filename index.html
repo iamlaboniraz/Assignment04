@@ -9,10 +9,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <!-- <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap"
         rel="stylesheet"> -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    
+    <!-- sweetalert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -55,27 +57,43 @@
             <div class="input-group f-class">
                 <div>
                     <label for="">First Class (<span id="first-total">$150</span>)</label>
+                    <!-- <input id="first-count" class="inp-style inp-width" type="number" name="" value="0"> -->
+                    <!-- <input id="first-count" class="form-control text-center" type="number" name="" value="0"> -->
+                </div>
+
+                <div class="input-group number-spinner">
+                    <button onclick="handleBookingChange('first',false)" class="btn btn-danger"><i class="fas fa-minus"></i></button>
                     <input id="first-count" class="inp-style inp-width" type="number" name="" value="0">
-                </div>
-                <div class="plus-minus-btn">
-                    <!-- <p>+ -</p> -->
-                    <button onclick="handleBookingChange('first',false)" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                  
+                    <button onclick="handleBookingChange('first',true)" class="btn btn-success"><i class="fas fa-plus"></i></button>
+                 </div>
+                
+                <!-- <div class="plus-minus-btn">
+                    <p>+ -</p>
+                    <button onclick="handleBookingChange('first',false)" class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                    <button onclick="handleBookingChange('first',true)" class="btn btn-success"><i class="fas fa-plus"></i></button>
                     <button onclick="handleBookingChange('first',true)" class="btn btn-default"><i class="fas fa-plus"></i></button>
-                </div>
+                </div> -->
             </div>
             
             <div class="input-group f-class">
                 <div>
                     <label for="">Economy (<span id="economy-total">$100</span>)</label>
-                    <input id="economy-count" class="inp-style inp-width" type="number" name="" value="0">
+                   
                 </div>
-                <div class="plus-minus-btn">
-                    <!-- <p> <span>+</span> <span>-</span> </p> -->
+
+                <div class="input-group number-spinner">
+                    <button onclick="handleBookingChange('economy',false)"  class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                    <input id="economy-count" class="inp-style inp-width" type="number" name="" value="0">
+                    <button onclick="handleBookingChange('economy',true)"  class="btn btn-success"><i class="fas fa-plus"></i></button>
+                 </div>
+
+
+                <!-- <div class="plus-minus-btn">
+                    <p> <span>+</span> <span>-</span> </p>
                     <button onclick="handleBookingChange('economy',false)" class="btn btn-default"><i class="fas fa-minus"></i></button>
                   
                     <button onclick="handleBookingChange('economy',true)" class="btn btn-default"><i class="fas fa-plus"></i></button>
-                </div>
+                </div> -->
             </div>
             <div class="calculations">
                 <div class="amount">
@@ -116,8 +134,6 @@
         <script>
 
             function handleBookingChange(booking,isIncrease){
-                // const bookingInput = document.getElementById(booking+"-count");
-                // const bookingCount = parseFloat(bookingInput.value);
                 const bookingCount = getInputValue(booking)
                 let bookingNewCount = bookingCount;
                 if (isIncrease == true){
@@ -142,21 +158,15 @@
         
 
             function totalCalculate(){
-            //    const firstInput = document.getElementById("first-count");
-            //    const firstCount = parseInt(firstInput.value);
-
-            //    const economyInput = document.getElementById("economy-count");
-            //    const economyCount = parseInt(economyInput.value);
-
                 const firstCount =  getInputValue("first");
                 const economyCount =  getInputValue("economy");
                 const totalPrice = firstCount * 150 + economyCount * 100;
-                console.log(totalPrice)
                 document.getElementById("sub-total").innerText = "$"+totalPrice;
                 const tax = Math.round(totalPrice * 0.1);
                 document.getElementById("tax-amount").innerText = "$"+tax;
                 const grandtotal = totalPrice + tax;
                 document.getElementById("total-price").innerText = "$"+grandtotal;
+                return grandtotal;
             }
 
             function getInputValue(booking){
@@ -166,19 +176,21 @@
             }
 
             function formValidation(){
+                const total = totalCalculate();
+                console.log(total);
                 const firstClass =  getInputValue("first");
                 const economy =  getInputValue("economy");
-                if (firstClass && !economy){
-                    swal("Booking Successfully Done!", "You Choose "+firstClass +" Sit for First Class", "success");
+                if (firstClass && !economy &&firstClass>0){
+                    swal("Booking Successfully Done!", "You Choose "+firstClass +" Sit for First Class and Total Price "+total, "success");
                 }
-                else if (!firstClass && economy){
-                    swal("Booking Successfully Done!", "You Choose "+economy +" Sit for Economy", "success");
+                else if (!firstClass && economy && economy>0){
+                    swal("Booking Successfully Done!", "You Choose "+economy +" Sit for Economy and Total Price "+total, "success");
                 }
-                else if (firstClass && economy){
-                    swal("Booking Successfully Done!", "You Choose "+firstClass +" Sit for First Class and "+economy+" sit for Economy", "success");
+                else if (firstClass && economy && firstClass>0 && economy>0){
+                    swal("Booking Successfully Done!", "You Choose "+firstClass +" Sit for First Class and "+economy+" sit for Economy and Total Price "+total, "success");
                 }
                 else{
-                    sweetAlert("Oops....", "Please Insert Your First Class Or Economy Sit", "error");
+                    sweetAlert("Oops....", "Please Select Your First Class Or Economy Sit Properly", "error");
                 }
             }
             
