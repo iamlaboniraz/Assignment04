@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 
-    
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -105,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn-style">Book Now</button>
+            <button onclick="formValidation();" type="button" class="btn-style">Book Now</button>
         </div>
 
         <div class="booking-content">
@@ -164,41 +164,24 @@
                 const bookingCount = parseInt(bookingInput.value);
                 return bookingCount
             }
+
+            function formValidation(){
+                const firstClass =  getInputValue("first");
+                const economy =  getInputValue("economy");
+                if (firstClass && !economy){
+                    swal("Booking Successfully Done!", "You Choose "+firstClass +" Sit for First Class", "success");
+                }
+                else if (!firstClass && economy){
+                    swal("Booking Successfully Done!", "You Choose "+economy +" Sit for Economy", "success");
+                }
+                else if (firstClass && economy){
+                    swal("Booking Successfully Done!", "You Choose "+firstClass +" Sit for First Class and "+economy+" sit for Economy", "success");
+                }
+                else{
+                    sweetAlert("Oops....", "Please Insert Your First Class Or Economy Sit", "error");
+                }
+            }
             
-
-        // function handleBookingChange(isIncrease){
-        //     const firstInput = document.getElementById("first-count");
-        //     const firstCount = parseFloat(firstInput.value);
-        //     let firstNewCount = firstCount;
-        //     if (isIncrease == true){
-        //         firstNewCount = firstCount + 1;
-        //     }
-        //     if (isIncrease == false && firstCount>0){
-        //         firstNewCount = firstCount - 1;
-        //     }
-        //     firstInput.value = firstNewCount;
-        //     console.log(firstInput.value);
-        //     const firstTotal = firstNewCount * 150;
-        //     document.getElementById("first-total").innerText = "$"+firstTotal;
-        // }
-
-
-        // function handleEconomyChange(isIncrease){
-        //     const firstInput = document.getElementById("economy-count");
-        //     const firstCount = parseFloat(firstInput.value);
-        //     let firstNewCount = firstCount;
-        //     if (isIncrease == true){
-        //         firstNewCount = firstCount + 1;
-        //     }
-        //     if (isIncrease == false && firstCount>0){
-        //         firstNewCount = firstCount - 1;
-        //     }
-        //     firstInput.value = firstNewCount;
-        //     console.log(firstInput.value);
-        //     const firstTotal = firstNewCount * 100;
-        //     document.getElementById("economy-total").innerText = "$"+firstTotal;
-        // }
-
         </script>
     </section>
 
